@@ -47,7 +47,7 @@ class ReportServiceClient:
         if future:
             future.set_result(message.body)
 
-    async def send_task(self, task_data: dict):
+    async def send_message(self, task_data: dict):
         corr_id = str(uuid.uuid4())
         future = self.loop.create_future()
         self.futures[corr_id] = future
@@ -69,19 +69,14 @@ class ReportServiceClient:
         logger.info("Closing connection")
         await self.connection.close()
 
-
-async def send_message_and_wait_for_response(client: ReportServiceClient, sample_data: dict):
-    logger.info(f"Sending message with data: {sample_data}")
-    response = await client.send_task(sample_data)
-    logger.success(f"Received: {response}")
+    async def send_message_and_wait_for_response(self, sample_data: dict):
+        logger.info(f"Sending message with data: {sample_data}")
+        response = await self.send_message(sample_data)
+        logger.success(f"Received: {response}")
 
 
 async def main():
-    client = ReportServiceClient(url=RABBITMQ_URL, queue_key=RABBITMQ_QUEUE_KEY)
-    await client.connect()
-
     requests_path = Path("example_requests.json")
-
     sample_requests = json.load(requests_path.open("r"))  # load sample requests
 
     # sample_requests = [
@@ -90,7 +85,10 @@ async def main():
     #     {'phones': [67, 116, 125, 107, 187, 140, 0, 33, 114, 78]},
     # ]
 
-    tasks = [send_message_and_wait_for_response(client, sample_data) for sample_data in sample_requests]
+    client = ReportServiceClient(url=RABBITMQ_URL, queue_key=RABBITMQ_QUEUE_KEY)
+    await client.connect()
+
+    tasks = [client.send_message_and_wait_for_response(sample_data) for sample_data in sample_requests]
 
     logger.info("Waiting for responses")
     await asyncio.gather(*tasks)

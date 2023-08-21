@@ -11,6 +11,7 @@ class TestGetReportForPhone(unittest.TestCase):
     def test_empty_data(self):
         data = {}
         phone_numbers = [0]
+
         actual_result = asyncio.run(self.get_report(data, phone_numbers))
         expected_result = [
             {'phone': 0, 'cnt_all_attempts': 0, 'cnt_att_dur': {'10_sec': 0, '10_30_sec': 0, '30_sec': 0},
@@ -20,7 +21,9 @@ class TestGetReportForPhone(unittest.TestCase):
         self.assertEqual(actual_result, expected_result)
 
     def test_empty_phone_numbers(self):
-        data = {0: [{"start_date": 0, "end_date": 10000}]}
+        data = {
+            0: [{"start_date": 0, "end_date": 10000}]
+        }
         phone_numbers = []
 
         actual_result = asyncio.run(self.get_report(data, phone_numbers))

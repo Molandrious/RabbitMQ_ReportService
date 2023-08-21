@@ -9,7 +9,7 @@ Welcome to this repository! Follow the steps below to get started.
 Firstly, clone or download this repository to your local machine using:
 
 ```bash
-git clone [URL_OF_THIS_REPOSITORY]
+git clone https://github.com/Molandrious/RabbitMQ_ReportService.git
 ```
 
 ### 2. Create the `resources` Directory

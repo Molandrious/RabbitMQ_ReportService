@@ -38,9 +38,13 @@ Before running the client, ensure the environment settings inside `client` match
 ### 6. Run client.py
 
 Install requirements.txt on yur local machine.
-Navigate to the `client_example` directory:
-You can change the requests data by using the provided `example_requests.json`. Once you're ready, execute:
 
 ```bash
-python client.py
+pip install -r requirements.txt
+```
+
+You can change the requests data by using the provided `example_requests.json` inside client_example dir. Once you're ready, execute:
+
+```bash
+python .\client_example\script_client.py 
 ```

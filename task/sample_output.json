@@ -1,0 +1,36 @@
+{
+    "correlation_id": 13242421424214,
+    "status": "Complete",
+    "task_received": "2023-05-09 02:27:03.049772",
+    "from": "report_service",
+    "to": "client",
+    "data": [
+        {
+            "phone": 2,
+            "cnt_all_attempts": 12675,
+            "cnt_att_dur": {
+                "10_sec": 675,
+                "10_30_sec": 2000,
+                "30_sec": 12000
+            },
+            "min_price_att": 30,
+            "max_price_att": 1500,
+            "avg_dur_att": 46.7,
+            "sum_price_att_over_15": 2765.59
+        },
+        {
+            "phone": 6,
+            "cnt_all_attempts": 46759,
+            "cnt_att_dur": {
+                "10_sec": 759,
+                "10_30_sec": 6000,
+                "30_sec": 40000
+            },
+            "min_price_att": 27.86,
+            "max_price_att": 2876.55,
+            "avg_dur_att": 123.7,
+            "sum_price_att_over_15": 4075.62
+        }
+    ],
+    "total_duration": 0.67844633636
+}

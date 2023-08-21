@@ -1,0 +1,26 @@
+networks:
+  mynetwork:
+    driver: bridge
+
+services:
+  # RabbitMQ service configuration
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    networks:
+      - mynetwork
+
+  #report_service configuration
+  report_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+      RABBITMQ_QUEUE_KEY: "ReportServiceQueue"
+    networks:
+      - mynetwork
+    depends_on:
+      - rabbitmq

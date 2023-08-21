@@ -158,18 +158,23 @@ class PhoneReportService:
         """
         reports = []
         for number in phone_numbers:
-            calls_data = data.get(number, [])
-            cnt_all_attempts = len(calls_data)
+            number_data = data.get(number, [])
 
             durations = []
-            min_price_att = (calls_data[0]['end_date'] - calls_data[0]['start_date']) / 100
-            max_price_att = 0
             cnt_10_sec = 0
             cnt_10_30_sec = 0
             cnt_30_sec = 0
             sum_price_att_over_15 = 0
 
-            for item in calls_data:
+            if number_data:
+                first_record = number_data[0] if number_data else None
+                min_price_att = max_price_att = (first_record['end_date'] - first_record['start_date']) / 100
+                cnt_all_attempts = len(number_data)
+            else:
+                min_price_att = max_price_att = 0
+                cnt_all_attempts = 0
+
+            for item in number_data:
                 duration = (item['end_date'] - item['start_date']) / 1000
                 durations.append(duration)
                 price = duration * 10
@@ -180,7 +185,7 @@ class PhoneReportService:
                 if price > max_price_att:
                     max_price_att = price
 
-                if price > 15:
+                if duration >= 15:
                     sum_price_att_over_15 += price
 
                 if duration < 10:

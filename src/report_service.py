@@ -2,7 +2,7 @@ import asyncio
 import json
 from datetime import (
     datetime,
-    timezone
+    timezone,
 )
 from functools import wraps
 from pathlib import Path
@@ -17,6 +17,24 @@ from aio_pika import (
 )
 from aio_pika.abc import AbstractIncomingMessage
 from loguru import logger
+
+
+def measure_time(func):
+    """
+    Decorator for measuring the execution time of an asynchronous function.
+
+    :param func: Asynchronous function to be measured.
+    :return: Dictionary with the execution time (duration) and result of the function.
+    """
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs) -> dict[str, Any]:
+        start_time = perf_counter()
+        result = await func(*args, **kwargs)
+        duration = perf_counter() - start_time
+        return {"duration": duration, "result": result}
+
+    return wrapper
 
 
 class PhoneReportService:
@@ -218,21 +236,3 @@ class PhoneReportService:
 
     def run(self):
         asyncio.run(self._connect())
-
-
-def measure_time(func):
-    """
-    Decorator for measuring the execution time of an asynchronous function.
-
-    :param func: Asynchronous function to be measured.
-    :return: Dictionary with the execution time (duration) and result of the function.
-    """
-
-    @wraps(func)
-    async def wrapper(*args, **kwargs) -> dict[str, Any]:
-        start_time = perf_counter()
-        result = await func(*args, **kwargs)
-        duration = perf_counter() - start_time
-        return {"duration": duration, "result": result}
-
-    return wrapper
